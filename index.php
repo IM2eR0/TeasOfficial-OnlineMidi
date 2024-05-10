@@ -13,7 +13,7 @@ $_MIDIDIR = "./midis";
 <body>
     <div class="tabbar">
         <ul>
-            <li><a href="https://nekogan.com/" target="_top">主站</a></li>
+            <li><a href="https://midi.nekogan.com/usermidis" target="_top">用户上传</a></li>
             <li><a href="https://midi.nekogan.com/" target="_top">返回首页</a></li>
         </ul>
     </div>
@@ -25,8 +25,9 @@ $_MIDIDIR = "./midis";
         </center>
         <hr>
         <h3>Midi文件列表</h3>
-        <nav>上传 Midi 请联系 昵称违规喵（QQ号：1099058373）</nav>
+        <nav>本页为站长收集的高质量midi！</nav>
         <nav>善用浏览器搜索功能（Ctrl+F），快速定位midi文件！<br>PS：标注【多音轨】的midi文件不适合在GMod中进行播放！</nav>
+        <nav>如有侵权，请联系我们，我们将在第一时间删除！</nav>
         <br>
         <table>
             <thead>
