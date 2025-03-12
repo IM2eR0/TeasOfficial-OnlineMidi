@@ -4,6 +4,7 @@
         <title>Eh5の茶会 MIDI在线播放器</title>
         <link rel="stylesheet" href="https://nekogan.com/milligram.min.css">
         <link rel="stylesheet" href="https://nekogan.com/style.css">
+        <link rel="stylesheet" href="https://midi.nekogan.com/midiControl.css">
     </head>
     
     
@@ -45,6 +46,9 @@
                 <nav>
                     <nav id="midinotes"></nav>
                     <nav id="mididur"></nav>
+                    <? if (isset($_GET["ufile"])) { ?>
+                        <nav>该Midi文件为用户上传，质量不确定</nav>
+                    <? } ?>
                 </nav>
             </center>
             <hr>
@@ -59,7 +63,7 @@
                         }else{
                             echo "./usermidis/".$_GET["ufile"];
                         }
-                    ?>" sound-font="https://storage.nekogan.com/magentadata/js/soundfonts/sgm_plus" visualizer="#myVisualizer"></midi-player>
+                    ?>" sound-font="https://storage.googleapis.com/magentadata/js/soundfonts/sgm_plus" visualizer="#myVisualizer"></midi-player>
                     <nav>音符数大于一万五时不推荐在线播放，如果在线播放显示感叹号就刷新，刷到可以播放为止</nav>
                 </center>
             </div>
@@ -68,16 +72,14 @@
             <div>
                 <center>
                     <h3>播放到Midi设备</h3>
-                    <nav>注意：因技术问题暂不支持暂停与调整进度，此功能将在未来进行实装</nav>
-                </center>
-                <hr>
-                <span>
-                    输入设备（若为空请尝试重启浏览器）：<select id="midiDevices"></select>
-                </span>
-                <p id="playa" style="color: green;"></p>
-                <center>
-                    <button onclick="playMidi()">播放</button>
-                    <nav>关掉页面就可以让midi停下来~</nav>
+                    <div id="controlPanel">
+                        <span>
+                            输入设备（若为空请尝试重启浏览器）：<select id="midiDevices"></select>
+                        </span>
+                        <p id="playa" style="color: green;"></p>
+                        <nav>关掉页面就可以让midi停下来~</nav>
+                    </div>
+                    <button id="playButton">播放</button>
                 </center>
                 <hr>
                 <center>
@@ -87,7 +89,7 @@
                         if(isset($_GET["file"])){
                             printf('<a class="button" href="https://midi.nekogan.com/midis/%s" target="_blank">点击下载 %s</a>',$_GET["file"],$_GET["file"]);
                         }else{
-                            printf('<a class="button" href="https://midi.nekogan.com/midis/%s" target="_blank">点击下载 %s</a>',$_GET["ufile"],$_GET["ufile"]);
+                            printf('<a class="button" href="https://midi.nekogan.com/usermidis/%s" target="_blank">点击下载 %s</a>',$_GET["ufile"],$_GET["ufile"]);
                         };
                     ?>
                 </center>
@@ -102,47 +104,13 @@
 <script src="focus-visible.js"></script>
 <script src="html-midi-player.js"></script>
 <script>
-    let midiNotesArray = new Array(); 
-    core.urlToNoteSequence("<?
-        if(isset($_GET['file'])){
-            echo "./midis/".$_GET["file"];
-        }else{
-            echo "./usermidis/".$_GET["ufile"];
-        }
-    ?>").then(n=>{
-        document.getElementById("midinotes").innerText = "音符数量："+n.notes.length;
-        midiNotesArray = n.notes
-    })
-    let devicesnum = 0
-    WebMidi.enable(function(){
-    }).then(function(){
-        let midiDevices = document.getElementById("midiDevices")
-        WebMidi.outputs.forEach(output=>{
-            let devices = document.createElement("option")
-            devices.text = output.name + " [" + devicesnum + "]"
-            devicesnum++
-            devices.value = output.name
-            midiDevices.add(devices,null);
-        })
-    })
-    
-    function playMidi(){
-        let device = document.getElementById("midiDevices").value;
-        let output = WebMidi.getOutputByName(device);
-        document.getElementById("playa").innerText = "播放成功！"
-        midiNotesArray.forEach(n => {
-            let noteOnTime = n.startTime;
-            let noteOffTime = n.endTime;
-            setTimeout(() => {
-                output.playNote(n.pitch, 1, {
-                    time: noteOnTime * 1000,
-                    velocity: n.velocity / 127
-                });
-                output.stopNote(n.pitch, 1, {
-                    time: noteOffTime * 1000,
-                    velocity: n.velocity / 127
-                });
-            }, noteOnTime * 1000);
-        })
-    }
+    core.urlToNoteSequence("<?if (isset($_GET['file'])) {echo "./midis/".$_GET["file"];
+        } else {
+        echo "./usermidis/".$_GET["ufile"];
+}
+?> ").then(n=>{
+document.getElementById("midinotes").innerText = "音符数量：" + n.notes.length;
+midiNotesArray = n.notes
+})
 </script>
+<script src="teasMidiPlayer.js"></script>

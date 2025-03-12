@@ -1,0 +1,24 @@
+#controlPanel {
+    margin: 20px 0;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background: #f9f9f9;
+}
+
+#controlPanel label {
+    display: inline-block;
+    margin-right: 10px;
+    width: 150px;
+}
+
+#controlPanel input[type="range"] {
+    width: 200px;
+    vertical-align: middle;
+}
+
+#controlPanel button {
+    margin: 5px;
+    padding: 8px 15px;
+    cursor: pointer;
+}
